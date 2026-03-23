@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Notice | InfoCascade</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-bg: #f8f9fa;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    
+    .edit-container {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+    
+    .edit-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 2.5rem;
+      border-top: 4px solid var(--primary-color);
+    }
+    
+    .form-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .form-header h2 {
+      color: var(--secondary-color);
+      font-weight: 600;
+    }
+    
+    .form-label {
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-secondary {
+      background-color: #6c757d;
+      border-color: #6c757d;
+      padding: 0.75rem 1.5rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    
+    .btn-group {
+      gap: 1rem;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+    
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="edit-container">
+    <div class="edit-card">
+      <a href="/admin/dashboard" class="back-link">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+      </a>
+      
+      <div class="form-header">
+        <h2><i class="fas fa-edit me-2"></i>Edit Notice</h2>
+        <p class="text-muted mb-0">Update the notice details below</p>
+      </div>
+      
+      <form action="/admin/edit-notice/<%= notice._id %>" method="POST">
+        <div class="mb-4">
+          <label class="form-label">Notice Title</label>
+          <input type="text" name="title" class="form-control" value="<%= notice.title %>" placeholder="Enter notice title" required />
+        </div>
+        
+        <div class="mb-4">
+          <label class="form-label">Notice Content</label>
+          <div id="editorContainer" style="height: 300px; background: white; border: 1px solid #ccc; border-radius: 4px;"></div>
+          <input type="hidden" name="content" id="contentInput">
+        </div>
+        
+        <div class="d-flex btn-group">
+          <button type="submit" class="btn btn-primary flex-grow-1">
+            <i class="fas fa-save me-2"></i>Update Notice
+          </button>
+          <a href="/admin/dashboard" class="btn btn-secondary flex-grow-1">
+            <i class="fas fa-times me-2"></i>Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize Quill editor with existing notice content
+      const quill = new Quill('#editorContainer', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'header': 1 }, { 'header': 2 }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['link', 'image'],
+            ['clean']
+          ]
+        },
+        placeholder: 'Enter notice content with formatting...'
+      });
+
+      // Load existing content (notice.message contains HTML from Quill)
+      const existingContent = `<%- notice.message %>`;
+      quill.root.innerHTML = existingContent;
+
+      // Before form submit, populate hidden input with editor content
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          const content = quill.root.innerHTML;
+          document.getElementById('contentInput').value = content;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

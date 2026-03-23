@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard | InfoCascade</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+      --light-bg: #f8f9fa;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .notice-form {
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    
+    .notice-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--primary-color);
+      transition: transform 0.3s ease;
+    }
+    
+    .notice-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      padding: 0.5rem 1.5rem;
+    }
+    
+    .btn-danger {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+    
+    .btn-warning {
+      background-color: #f6c23e;
+      border-color: #f6c23e;
+      color: #212529;
+    }
+    
+    .divider {
+      border-top: 2px dashed #dee2e6;
+      margin: 2rem 0;
+      opacity: 0.5;
+    }
+    
+    .action-buttons {
+      min-width: 180px;
+      text-align: right;
+    }
+    
+    .notice-date {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    
+    textarea.form-control {
+      min-height: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-5">
+    <!-- Admin Header -->
+    <div class="admin-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2 class="mb-0"><i class="fas fa-user-shield me-2"></i>Welcome <%= admin.name %></h2>
+        <p class="mb-0">Admin Dashboard</p>
+      </div>
+      <a href="/admin/logout" class="btn btn-light">
+        <i class="fas fa-sign-out-alt me-1"></i>Logout
+      </a>
+    </div>
+
+    <!-- Post New Notice Card -->
+    <div class="notice-form">
+      <h4 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Post New Notice</h4>
+      <form action="/admin/post-notice" method="POST">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Notice Title</label>
+          <input type="text" name="title" class="form-control" placeholder="Enter notice title" required />
+        </div>
+        <div class="mb-4">
+          <label class="form-label fw-bold">Notice Content</label>
+          <div id="editorContainer" style="height: 300px; background: white; border: 1px solid #ccc; border-radius: 4px;"></div>
+          <input type="hidden" name="content" id="contentInput">
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane me-1"></i>Post Notice
+        </button>
+      </form>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Recent Notices Section -->
+    <div class="recent-notices">
+      <h4 class="mb-4"><i class="fas fa-history me-2"></i>Recently Posted Notices</h4>
+      
+      <% if (notices && notices.length === 0) { %>
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i>No notices have been posted yet.
+        </div>
+      <% } else { %>
+        <div class="notice-list">
+          <% notices.forEach(notice => { %>
+            <div class="notice-card p-4 mb-3">
+              <div class="d-flex justify-content-between">
+                <div class="w-75">
+                  <h5 class="fw-bold mb-2"><%= notice.title %></h5>
+                  <div class="mb-3"><%- notice.message %></div>
+                  <div class="notice-date">
+                    <i class="fas fa-user me-1"></i>
+                    Posted by <%= notice.postedBy && notice.postedBy.name ? notice.postedBy.name : 'Admin' %> 
+                    <i class="fas fa-calendar-alt ms-2 me-1"></i>
+                    <%= notice.date ? new Date(notice.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %>
+                  </div>
+                </div>
+                <div class="action-buttons">
+                  <a href="/admin/edit-notice/<%= notice._id %>" class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit me-1"></i>Edit
+                  </a>
+                  <form action="/admin/delete-notice/<%= notice._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this notice?');" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash-alt me-1"></i>Delete
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- View All Users Button -->
+    <div class="mb-4">
+      <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#usersTable" aria-expanded="false" aria-controls="usersTable">
+        <i class="fas fa-users me-1"></i> View All Users
+      </button>
+    </div>
+
+    <!-- Users Table (Collapsed by default) -->
+    <div class="collapse" id="usersTable">
+      <div class="card card-body">
+        <h5 class="mb-3"><i class="fas fa-users me-2"></i>Registered Users</h5>
+        
+        <!-- Filter Users -->
+        <div class="mb-3">
+          <input type="text" id="userFilterInput" class="form-control" placeholder="Search by name or email...">
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>S.No.</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Branch</th>
+                <th>Year</th>
+                <th>Subscribed At</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach((user, idx) => { %>
+                <tr>
+                  <td><%= idx + 1 %></td>
+                  <td><%= user.name %></td>
+                  <td><%= user.email %></td>
+                  <td><%= user.branch %></td>
+                  <td><%= user.year %></td>
+                  <!-- <td><%= user.subscribedAt ? new Date(user.subscribedAt).toLocaleString() : '' %></td> -->
+                  <td><%= user.subscribedAt ? new Date(user.subscribedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %></td>
+
+                  <td>
+                    <form action="/admin/remove-user/<%= user._id %>" method="POST" onsubmit="return confirm('Are you sure you want to remove this user?');">
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-user-times me-1"></i>Remove
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const filterInput = document.getElementById('userFilterInput');
+      if (filterInput) {
+        filterInput.addEventListener('input', function () {
+          const filter = filterInput.value.toLowerCase();
+          document.querySelectorAll('#usersTable tbody tr').forEach(row => {
+            const name = row.children[1].textContent.toLowerCase();
+            const email = row.children[2].textContent.toLowerCase();
+            if (name.includes(filter) || email.includes(filter)) {
+              row.style.display = '';
+            } else {
+              row.style.display = 'none';
+            }
+          });
+        });
+      }
+
+      // Initialize Quill editor
+      const quill = new Quill('#editorContainer', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],        // text formatting
+            ['blockquote', 'code-block'],                      // block formatting
+            [{ 'header': 1 }, { 'header': 2 }],               // headers
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],     // lists
+            ['link', 'image'],                                 // links & images
+            ['clean']                                          // remove formatting
+          ]
+        },
+        placeholder: 'Enter notice content with formatting...'
+      });
+
+      // Before form submit, populate hidden input with editor content
+      const form = document.querySelector('form'); // adjust if multiple forms
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          const content = quill.root.innerHTML;
+          document.getElementById('contentInput').value = content;
+          // form submits normally with rich HTML in 'content' field
+        });
+      }
+    });
+  </script>
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <p class="mb-0">© 2025 InfoCascade - Jai Hoo Satnaryan.</p>
+      <p class="mb-0">Designed and Developed by Karan Singh.</p>
+    </div>
+  </footer>
+</body>
+</html>

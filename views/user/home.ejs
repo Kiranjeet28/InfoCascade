@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>InfoCascade</title>
+  <link rel="icon" href="/images/Infocascade.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2c3e50;
+      --accent-color: #e74c3c;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .hero-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .notice-card {
+      border-left: 4px solid var(--primary-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .notice-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .btn-subscribe {
+      background-color: #2ecc71;
+      border-color: #2ecc71;
+    }
+
+    .text-accent {
+      color: var(--accent-color);
+    }
+
+    #visitCounter {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background: #3498db;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    #backToTop {
+      position: fixed;
+      bottom: 60px;
+      right: 20px;
+      display: none;
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50%;
+      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    /* Team & Admin Section (added) */
+    .profile-card {
+      border: none;
+      overflow: hidden;
+      border-radius: 12px;
+      transition: transform .28s ease, box-shadow .28s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(44, 62, 80, .12);
+    }
+
+    .profile-avatar {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 6px solid #fff;
+      box-shadow: 0 8px 20px rgba(52, 152, 219, .12);
+    }
+
+    .team-section h3 {
+      letter-spacing: .4px;
+    }
+
+    .team-badge {
+      background: linear-gradient(90deg, #3498db, #2c3e50);
+      color: #fff;
+      padding: .35rem .6rem;
+      border-radius: 999px;
+      font-size: .8rem;
+    }
+
+    .social-icon {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .05);
+      color: #2c3e50;
+      margin: 0 .15rem;
+      transition: all .2s;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px);
+      background: #3498db;
+      color: #fff;
+    }
+
+    /* Scrollable notices section styles (added) */
+    .scroll-notices-section {
+      background: linear-gradient(180deg, rgba(52,152,219,0.04), rgba(44,62,80,0.02));
+      padding: 2rem 0;
+      border-radius: 10px;
+      margin: 2rem 0;
+    }
+
+    .scroll-notices-wrapper {
+      max-height: 60vh;
+      overflow-y: auto;
+      padding-right: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-notice-item {
+      background: #fff;
+      border-left: 4px solid var(--primary-color);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .scroll-notice-item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    }
+
+    /* custom thin scrollbar */
+    .scroll-notices-wrapper::-webkit-scrollbar { width: 10px; }
+    .scroll-notices-wrapper::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #3498db, #2c3e50);
+      border-radius: 10px;
+    }
+
+    .student-class-card {
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #eef6ff, #ffffff);
+      box-shadow: 0 8px 22px rgba(44, 62, 80, 0.08);
+      margin-bottom: 1.5rem;
+    }
+
+    .class-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-right: 0.35rem;
+      background: #eaf2fb;
+      color: #2c3e50;
+    }
+
+  </style>
+</head>
+
+<body class="bg-light">
+  <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">InfoCascade</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+        aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNavbar">
+        <div class="navbar-nav ms-auto text-center">
+          <a class="nav-link active" href="/">Home</a>
+          <a class="nav-link" href="/timetable">Timetable</a>
+          <% if (!currentUser) { %>
+            <a class="nav-link" href="/login">Login</a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+
+
+    <!-- Header Section -->
+    <div class="hero-header text-center">
+      <h1 class="display-4 fw-bold">Welcome to InfoCascade</h1>
+      <p class="lead">“ InfoCascade is a one-stop source for all important notifications — academic updates, results, fees, events, and more. Join the flow of trusted and timely information.”
+
+</p>
+
+    </div>
+
+    <!-- Top Navigation -->
+    <div class="top-nav">
+      <a href="/admin/login" class="btn btn-primary"><i class="fas fa-lock me-1"></i> Admin Login</a>
+    </div>
+
+
+    <!-- Notices Section -->
+    <% if (currentUser && studentClassSummary) { %>
+      <div class="row mb-3">
+        <div class="col-lg-8 mx-auto">
+          <div class="card student-class-card">
+            <div class="card-body">
+              <h5 class="mb-2">
+                <i class="fas fa-user-clock text-primary me-2"></i>Your Live Class Update
+              </h5>
+              <div class="small text-muted mb-3">
+                <strong><%= studentClassSummary.departmentLabel %></strong> •
+                Group <strong><%= studentClassSummary.groupName %></strong> •
+                <%= studentClassSummary.dayName %>
+              </div>
+
+              <div class="mb-2">
+                <div class="fw-semibold text-secondary mb-1">Present Class</div>
+                <% if (studentClassSummary.presentClass) { %>
+                  <span class="class-chip"><%= studentClassSummary.presentClass.time || '--:--' %></span>
+                  <span>
+                    <%= (studentClassSummary.presentClass.entries && studentClassSummary.presentClass.entries[0] && studentClassSummary.presentClass.entries[0].subject) || (studentClassSummary.presentClass.isFree ? 'Free Period' : 'Class') %>
+                  </span>
+                <% } else { %>
+                  <span class="text-muted">No class running right now.</span>
+                <% } %>
+              </div>
+
+              <div>
+                <div class="fw-semibold text-secondary mb-1">Next Class</div>
+                <% if (studentClassSummary.nextClass) { %>
+                  <span class="class-chip"><%= studentClassSummary.nextClass.time || '--:--' %></span>
+                  <span>
+                    <%= (studentClassSummary.nextClass.entries && studentClassSummary.nextClass.entries[0] && studentClassSummary.nextClass.entries[0].subject) || (studentClassSummary.nextClass.isFree ? 'Free Period' : 'Class') %>
+                  </span>
+                <% } else { %>
+                  <span class="text-muted">No more classes scheduled for today.</span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="row mb-5">
+      <div class="col-lg-8 mx-auto">
+        <h2 class="text-center mb-4"><i class="fas fa-bullhorn text-accent me-2"></i>Latest Updates</h2>
+
+        <% if (notices.length===0) { %>
+          <div class="alert alert-info text-center">
+            <i class="fas fa-info-circle me-2"></i> No notices available at the moment. Please check back later.
+          </div>
+          <% } else { %>
+            <% notices.forEach(notice=> { %>
+              <div class="card notice-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="card-title fw-bold"><i class="fas fa-sticky-note text-primary me-2"></i>
+                      <%= notice.title %>
+                    </h5>
+                    
+                  </div>
+                  <div class="card-text mt-2"><%- notice.message %></div>
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                    <small class="text-muted">
+                      <i class="fas fa-user me-1"></i> Posted by <%= notice.postedBy && notice.postedBy.name ?
+                        notice.postedBy.name : 'Admin' %>
+                    </small>
+                    <small class="text-muted">
+                      <i class="fas fa-calendar-alt me-1"></i>
+                      <%= notice.date ? new Date(notice.date).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : '' %>
+                    </small>
+                  </div>
+                </div>
+              </div>
+              <% }) %>
+                <% } %>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- <div id="visitCounter">
+  Visits: <span id="visitCount">0</span>
+</div> -->
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get the current visit count from localStorage
+      let visitCount = localStorage.getItem('visitCount');
+
+      // If no count exists, initialize it to 0
+      if (!visitCount) {
+        visitCount = 0;
+      }
+
+      // Increment the visit count
+      visitCount++;
+
+      // Save the updated count back to localStorage
+      localStorage.setItem('visitCount', visitCount);
+
+      // Display the visit count in the counter
+      const visitCountEl = document.getElementById('visitCount');
+      if (visitCountEl) {
+        visitCountEl.textContent = visitCount;
+      }
+
+      // Back to top button functionality
+      const backToTopBtn = document.getElementById('backToTop');
+      window.onscroll = function () {
+        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+          backToTopBtn.style.display = "block";
+        } else {
+          backToTopBtn.style.display = "none";
+        }
+      };
+
+      backToTopBtn.onclick = function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+    });
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const backToTopButton = document.getElementById('backToTop');
+
+    // Show the button when the user scrolls down 100px
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 100) {
+        backToTopButton.style.display = 'block';
+      } else {
+        backToTopButton.style.display = 'none';
+      }
+    });
+
+    // Scroll to the top when the button is clicked
+    backToTopButton.addEventListener('click', function () {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
+
+  <!-- Team & Admin Section (added) -->
+  <style>
+    .profile-card { border: none; overflow: hidden; border-radius: 12px; transition: transform .28s ease, box-shadow .28s ease; }
+    .profile-card:hover { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(44,62,80,.12); }
+    .profile-avatar { width:140px; height:140px; object-fit:cover; border-radius:50%; border:6px solid #fff; box-shadow: 0 8px 20px rgba(52,152,219,.12); }
+    .team-section h3 { letter-spacing:.4px; }
+    .team-badge { background: linear-gradient(90deg,#3498db,#2c3e50); color:#fff; padding:.35rem .6rem; border-radius:999px; font-size:.8rem; }
+    .social-icon { width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(0,0,0,.05); color:#2c3e50; margin:0 .15rem; transition: all .2s; }
+    .social-icon:hover { transform: translateY(-3px); background: #3498db; color: #fff; }
+  </style>
+
+  <section class="team-section py-5 bg-white">
+    <div class="container">
+      <!-- Admin row -->
+      <div class="text-center mb-4">
+        <h3 class="fw-bold">Admin</h3>
+        <p class="text-muted mb-0">Primary administrator — manages notices & announcements</p>
+      </div>
+
+      <div class="row justify-content-center mb-5">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card profile-card text-center p-4 shadow-sm">
+            <!-- replace src with actual admin photo path -->
+            <img src="/images/KaranProfile.png" alt="Admin photo" class="profile-avatar mx-auto d-block mb-3">
+            <div class="card-body p-0">
+              <h5 class="mb-1 fw-bold">Karan Singh</h5>
+              <div class="mb-2"><span class="team-badge">Head Admin • CSE</span></div>
+              <p class="text-muted small mb-3">Responsible for posting official notices and managing user subscriptions.</p>
+              <div>
+                <a href="https://www.linkedin.com/in/karan-singh-36bb6b274/" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/CS4410" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="mailto: singhkaran91973@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team row -->
+      <div class="text-center mb-4">
+        <h3 class="fw-bold">Our Team</h3>
+        <p class="text-muted mb-4">Dedicated team that builds and maintains InfoCascade</p>
+      </div>
+
+      <div class="row g-4 justify-content-center">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card profile-card text-center p-3 h-100">
+            <img src="/images/JayantProfile1.png" alt="Team member" class="profile-avatar mx-auto d-block mb-3">
+            <div class="card-body p-0">
+              <h6 class="mb-0 fw-bold">Jayant Kumawat</h6>
+              <small class="text-muted">(B.Tech-CSE)</small><br>
+              <small class="text-muted">Technical & Communications Specialist</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card profile-card text-center p-3 h-100">
+            <img src="/images/KiranjitProfile.png" alt="Team member" class="profile-avatar mx-auto d-block mb-3">
+            <div class="card-body p-0">
+              <h6 class="mb-0 fw-bold">Kiranjeet Kour</h6>
+              <small class="text-muted">(B.Tech-CSE)</small><br>
+              <small class="text-muted">Technical Analyst</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card profile-card text-center p-3 h-100">
+            <img src="/images/AbhayProfile.png" alt="Team member" class="profile-avatar mx-auto d-block mb-3">
+            <div class="card-body p-0">
+              <h6 class="mb-0 fw-bold">Abhay Singh</h6>
+              <small class="text-muted">(B.Tech-CE)</small><br>
+              <small class="text-muted">Communication & Outreach Coordinator</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end Team & Admin Section -->
+
+
+
+
+
+
+
+  
+</body>
+
+
+
+<!-- Contact Us Form (separate title "Contact Us Form") -->
+
+
+<style>
+  /* ===== Contact Section Styling ===== */
+
+#contactUsSection {
+  background: linear-gradient(135deg, #eef2f3, #dfe9f3);
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
+
+/* Card glass effect */
+#contactUsSection .card {
+  border: none;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.75);
+  transition: all 0.4s ease;
+}
+
+#contactUsSection .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Heading */
+#contactUsSection h3 {
+  font-size: 2rem;
+  color: #0d6efd;
+  letter-spacing: 1px;
+}
+
+/* Labels */
+#contactUsSection label {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs */
+#contactUsSection input,
+#contactUsSection textarea {
+  border-radius: 12px;
+  border: 1.5px solid #c9c9c9;
+  padding: 10px 14px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+#contactUsSection input:focus,
+#contactUsSection textarea:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button */
+#contactUsSection button {
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 12px;
+  transition: 0.3s ease;
+  background: linear-gradient(135deg, #0d6efd, #4ba3ff);
+  border: none;
+}
+
+#contactUsSection button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #0b5ed7, #1c7ed6);
+}
+
+/* Alert message */
+#contactFormAlert {
+  border-radius: 12px;
+  font-size: 15px;
+  padding: 12px;
+}
+
+/* Smooth form animations */
+#contactUsSection .form-control {
+  animation: fadeInUp 0.6s ease;
+}
+
+/* Keyframe animation for smooth appearance */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Optimization */
+@media (max-width: 576px) {
+  #contactUsSection h3 {
+    font-size: 1.6rem;
+  }
+  #contactUsSection .card-body {
+    padding: 1.5rem !important;
+  }
+}
+
+</style>
+
+  <!-- <section id="contactUsSection" class="py-5 bg-light">
+    <div class="container">
+      <div class="text-center mb-4">
+        <h3 class="fw-bold">Contact Us Form</h3>
+        <p class="text-muted mb-0">Have a query? Send us a message — we'll respond as soon as possible.</p>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <form id="contactForm" class="row g-3" autocomplete="off">
+                <div class="col-md-6">
+                  <label for="contactName" class="form-label">Name</label>
+                  <input type="text" id="contactName" name="name" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                  <label for="contactEmail" class="form-label">Email</label>
+                  <input type="email" id="contactEmail" name="email" class="form-control" required>
+                </div>
+                <div class="col-12">
+                  <label for="contactMessage" class="form-label">Message</label>
+                  <textarea id="contactMessage" name="message" rows="5" class="form-control" required></textarea>
+                </div>
+
+                <div class="col-12 d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">Send Message</button>
+                </div>
+
+                <div class="col-12">
+                  <div id="contactFormAlert" class="alert d-none mb-0" role="alert"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- end Contact Us Form -->
+  
+
+
+  <script>
+    // contact form JS (keeps behavior local to this page)
+    (function () {
+      const form = document.getElementById('contactForm');
+      const alertEl = document.getElementById('contactFormAlert');
+
+      if (!form) return;
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        alertEl.className = 'alert d-none';
+        const data = {
+          name: form.name.value.trim(),
+          email: form.email.value.trim(),
+          message: form.message.value.trim()
+        };
+        if (!data.name || !data.email || !data.message) {
+          alertEl.className = 'alert alert-danger';
+          alertEl.textContent = 'Please fill all fields.';
+          return;
+        }
+
+        try {
+          const res = await fetch('/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const json = await res.json();
+          if (res.ok) {
+            alertEl.className = 'alert alert-success';
+            alertEl.textContent = json.message || 'Message sent. Thank you!';
+            form.reset();
+          } else {
+            alertEl.className = 'alert alert-danger';
+            alertEl.textContent = json.error || 'Failed to send message. Try later.';
+          }
+        } catch (err) {
+          alertEl.className = 'alert alert-danger';
+          alertEl.textContent = 'Network error. Try again later.';
+        }
+      });
+    })();
+  </script>
+
+
+
+ <a href='http://www.freevisitorcounters.com'>Free counter</a> <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=0896f89e9cd1afc545066147603ad3ac36fbfd80'></script>
+<script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/1383063/t/10"></script>
+
+  <button id="backToTop">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+
+<!-- 
+  <footer class="bg-dark text-white text-center py-3 mt-5">
+    <div class="container">
+      <p class="mb-0">© 2025 InfoCascade - Jai Hoo Satnaryan.</p>
+       <p class="mb-0">Designed and Developed by Karan Singh.</p>
+    </div>
+  </footer> -->
+  
+
+<footer class="bg-dark text-white pt-5 pb-4 mt-5">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-md-4">
+          <h5 class="fw-bold mb-3">InfoCascade</h5>
+          <p class="small text-muted">
+            InfoCascade delivers trusted and timely college notices — academics, events, results and more.
+          </p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="https://www.linkedin.com" target="_blank" class="btn btn-outline-light btn-sm"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://github.com" target="_blank" class="btn btn-outline-light btn-sm"><i class="fab fa-github"></i></a>
+            <a href="mailto:infocascade.gndec@gmail.com" class="btn btn-outline-light btn-sm"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Quick Links</h6>
+          <ul class="list-unstyled small">
+            <li><a href="/" class="text-white text-decoration-none">Home</a></li>
+            <li><a href="/admin/login" class="text-white text-decoration-none">Admin Login</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Privacy Policy</a></li>
+            <li><a href="#" class="text-white text-decoration-none">Terms</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4">
+          <h6 class="fw-semibold">Contact Us</h6>
+          <p class="small mb-1"><i class="fas fa-envelope me-2"></i><a href="mailto:infocascade.gndec@gmail.com" class="text-white text-decoration-none">infocascade.gndec@gmail.com</a></p>
+          <p class="small mb-3"><i class="fas fa-phone me-2"></i><a href="tel:+919906108715" class="text-white text-decoration-none">+91 99061 08715</a></p>
+
+          <div id="footerSubMsg" class="mt-2 small" style="display:none;"></div>
+        </div>
+      </div>
+
+      <hr class="border-light my-4">
+
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <small class="text-white">© <span id="currentYear"></span> InfoCascade. All rights reserved.</small>
+        <small class="text-white">Designed & Developed by Karan Singh</small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Footer styles + small script (kept local and minimal) -->
+  <style>
+    footer a:hover { text-decoration: underline; color: #cfe9ff; }
+    @media (max-width: 576px) {
+      .top-nav { flex-direction: column; gap: .75rem; }
+    }
+  </style>
+
+
+</html>

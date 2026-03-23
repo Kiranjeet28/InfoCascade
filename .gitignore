@@ -1,0 +1,20 @@
+.vercel
+# Ignore node_modules (big auto-generated folder)
+node_modules/
+
+# Ignore environment variable file (contains secrets)
+.env
+
+# Ignore logs
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Optional: Vercel deployment files
+.vercel/
+
+# Ignore any compiled files (if any in the future)
+dist/
+build/
