@@ -18,7 +18,11 @@ router.post('/', async (req, res) => {
     if (!title || !details) {
       return res.status(400).json({ error: 'Title and details are required.' });
     }
-    const feedback = new Feedback({ title, details, contact });
+    const contactStr = contact != null ? String(contact).trim() : '';
+    if (contactStr && !/^\d{10}$/.test(contactStr)) {
+      return res.status(400).json({ error: 'Contact number must be exactly 10 digits, numbers only.' });
+    }
+    const feedback = new Feedback({ title, details, contact: contactStr || undefined });
     await feedback.save();
     feedbackCache.add(userKey);
     res.status(201).json({ message: 'Thank you for your feedback!' });

@@ -239,8 +239,8 @@
               <textarea class="form-control" id="feedbackDetails" name="details" rows="4" maxlength="500" required placeholder="Describe your feedback"></textarea>
             </div>
             <div class="mb-3">
-              <label for="feedbackContact" class="form-label">Get your problem custom support (Contact Email or Phone)</label>
-              <input type="text" class="form-control" id="feedbackContact" name="contact" maxlength="100" placeholder="Enter your email or phone (optional)">
+              <label for="feedbackContact" class="form-label">Contact number (optional)</label>
+              <input type="text" class="form-control" id="feedbackContact" name="contact" inputmode="numeric" maxlength="10" autocomplete="tel" placeholder="10-digit mobile number, numbers only" title="If provided, enter exactly 10 digits">
             </div>
             <div id="feedbackAlert" class="alert d-none" role="alert"></div>
           </div>
@@ -375,16 +375,29 @@
       const feedbackAlert = document.getElementById('feedbackAlert');
       const feedbackModal = document.getElementById('feedbackModal');
       if (feedbackForm) {
+        var contactInput = document.getElementById('feedbackContact');
+        if (contactInput) {
+          contactInput.addEventListener('input', function () {
+            var v = contactInput.value.replace(/\D/g, '').slice(0, 10);
+            if (contactInput.value !== v) contactInput.value = v;
+          });
+        }
         feedbackForm.addEventListener('submit', async function (e) {
-          e.preventDefault();
           feedbackAlert.className = 'alert d-none';
           const title = feedbackForm.title.value.trim();
           const details = feedbackForm.details.value.trim();
           const contact = feedbackForm.contact.value.trim();
           const csrfToken = document.getElementById('csrfToken').value;
           if (!title || !details) {
+            e.preventDefault();
             feedbackAlert.className = 'alert alert-danger';
-            feedbackAlert.textContent = 'Please fill in both fields.';
+            feedbackAlert.textContent = 'Please fill in the title and details.';
+            return;
+          }
+          if (contact && !/^\d{10}$/.test(contact)) {
+            e.preventDefault();
+            feedbackAlert.className = 'alert alert-danger';
+            feedbackAlert.textContent = 'Contact number must be exactly 10 digits, numbers only.';
             return;
           }
           try {

@@ -13,7 +13,7 @@ const feedbackSchema = new mongoose.Schema({
   },
   contact: {
     type: String,
-    maxlength: 100
+    maxlength: 10
   },
   createdAt: {
     type: Date,
